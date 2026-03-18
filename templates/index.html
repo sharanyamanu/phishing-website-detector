@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Phishing Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">🛡️ AI Phishing Detector</div>
+  <div class="status">● Systems Online</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <h1>Analyze Any URL</h1>
+  <p class="subtitle">AI-powered threat intelligence in real time</p>
+
+  <form action="/predict" method="POST" class="search-box">
+    <input type="text" name="url" placeholder="Enter suspicious URL..." required>
+    <button type="submit">Analyze URL</button>
+  </form>
+
+  {% if error %}
+  <div class="alert danger">{{ error }}</div>
+  {% endif %}
+
+  {% if result %}
+  <!-- RESULT CARD -->
+  <div class="result-card {{ status }}">
+    <h2>{{ status }}</h2>
+    <p>{{ url }}</p>
+    <span>ML: {{ ml }}</span>
+  </div>
+
+  <!-- STATS -->
+  <div class="dashboard">
+
+    <div class="card red">
+      <h2>{{ malicious }}</h2>
+      <p>Malicious</p>
+    </div>
+
+    <div class="card yellow">
+      <h2>{{ suspicious }}</h2>
+      <p>Suspicious</p>
+    </div>
+
+    <div class="card green">
+      <h2>{{ harmless }}</h2>
+      <p>Harmless</p>
+    </div>
+
+    <!-- SCORE -->
+    <div class="score-card">
+      <h3>Threat Score</h3>
+      <div class="circle" style="--value: {{ score }}">
+        {{ score }}%
+      </div>
+    </div>
+
+  </div>
+  {% endif %}
+
+  <!-- RECENT -->
+  {% if scans %}
+  <div class="recent">
+    <h3>Recent Scans</h3>
+
+    {% for s in scans %}
+    <div class="scan">
+      <span>{{ s.url }}</span>
+      <span class="tag {{ s.status }}">{{ s.status }}</span>
+      <span>{{ s.time }}</span>
+    </div>
+    {% endfor %}
+
+  </div>
+  {% endif %}
+
+</div>
+
+</body>
+</html>
